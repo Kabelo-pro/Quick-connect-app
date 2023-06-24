@@ -61,7 +61,7 @@ main{
     justify-content: center;
     align-items: center;
     height: 65vh;
-    background: url("../assets/banner-4.jpg")center center/cover no-repeat;
+    background: url("../assets/banner-4.jpg") center/cover no-repeat;
     font-family: var(--bs-font-sans-serif);
   }
   
