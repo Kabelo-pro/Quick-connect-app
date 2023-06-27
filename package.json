@@ -1,0 +1,25 @@
+{
+  "name": "bernice-technologies",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kabelo-pro/Quick-connect-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kabelo-pro/Quick-connect-app/issues"
+  },
+  "homepage": "https://github.com/Kabelo-pro/Quick-connect-app#readme",
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "firebase": "^9.23.0"
+  }
+}

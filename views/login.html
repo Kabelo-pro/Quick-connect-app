@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Include any CSS styles specific to your login screen -->
+    <link rel="stylesheet" href="/public/style.css">
+</head>
+<body class="structure">
+
+    <div>
+
+    <img class="logo-image" src="../assets/logo.png"  alt="Logo">
+    <form id="login-form">
+        <div class="login-title"><h1>Login</h1></div>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Login</button>
+        <p>Don't have an account? <a href="/views/signup.html">Sign up here</a></p>
+    </form>
+    </div>
+    <!-- Include the Firebase SDK script -->
+    <script src="/__/firebase/8.9.1/firebase-app.js"></script>
+    <script src="/__/firebase/8.9.1/firebase-auth.js"></script>
+    <script src="/__/firebase/init.js"></script>
+    
+    <!-- Add your custom JavaScript code for handling login -->
+    <script src="script.js"></script>
+</body>
+</html>
