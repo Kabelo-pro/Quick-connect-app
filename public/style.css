@@ -214,7 +214,7 @@ main{
     border-radius: 3px;
   }
   
-  .structure button[type="submit"] {
+  .structure button[type="button"] {
     background-color: var(--secondary);
     color: white;
     border: none;
@@ -225,7 +225,7 @@ main{
     opacity: 0.9;
   }
   
-  .structure button[type="submit"]:hover {
+  .structure button[type="button"]:hover {
     transition: 0.5s;
     background-color: var(--secondary);
 
