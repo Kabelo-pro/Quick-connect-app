@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Include any CSS styles specific to your dashboard screen -->
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+<body class="dashboard-structure">
+    <header class="header"><div>
+        <!-- <button id="logoutBtn">Logout</button> -->
+        <div class="initialcontain">
+            <h2>Welcome <span id="username"></span>!</h2>
+
+            <div id="initialDiv">
+            </div>
+        </div>
+        
+    </div></header>
+    <div id="dropdownMenu">
+        <ul>
+            <li id="logoutOption">Logout</li>
+            <li>View Profile</li>
+        </ul>
+    </div>
+
+    <section class="sidebar close">
+        <nav>
+            <header>
+                <div class="image-text">
+                    <span class="image">
+                        <img src="../assets/logo.png" alt="Quick Connect ">
+                        
+                    </span>
+                </div>
+            </header>
+
+            <div class="menu-bar">
+                <div class="menu">
+                    <ul class="menu-links">
+                        <li class="nav-link">
+                            <a  href="dashboard.html">
+                                <i class="bx bx-home-alt icon"></i>
+                                <span class="text nav-text">Home</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="qr.html">
+                                <i class='bx bx-qr-scan icon'></i>
+                                <span class="text nav-text">My QR</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="profile.html">
+                                <i class='bx bx-user icon'></i>
+                                <span class="text nav-text">Profile</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="connections.html">
+                                <i class='bx bx-group icon'></i>
+                                <span class="text nav-text">Connections</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a class="active" href="nearby.html">
+                                <i class='bx bx-map icon'></i>
+                                <span class="text nav-text">Nearby</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a href="events.html">
+                                <i class='bx bx-calendar icon'></i>
+                                <span class="text nav-text">Networking Events</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+    
+            </div>
+        </nav>
+        <section class="overlay"></section>
+    </section>
+    <main class="main">
+        
+     
+    </main>
+    
+    <div class="bottom-navbar">
+        <a href="dashboard.html" >
+            <i class="bx bx-home-alt icon"></i>
+        </a>
+        <a href="qr.html" >
+            <i class='bx bx-qr-scan icon'></i>
+        </a>
+    
+        <a href="connections.html">
+            <i class='bx bx-group icon'></i>
+        </a>
+        <a class="active" href="nearby.html">
+            <i class='bx bx-map icon'></i>
+        </a>
+        <a href="events.html">
+            <i class='bx bx-calendar icon'></i>
+        </a>
+    </div>
+
+    <!-- Include the Firebase SDK script -->
+    <script src="/__/firebase/8.9.1/firebase-app.js"></script>
+    <script src="/__/firebase/8.9.1/firebase-auth.js"></script>
+    <script src="/__/firebase/init.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-auth.js"></script>
+    <!-- Add your custom JavaScript code for handling the dashboard -->
+    <script type="text/javascript">
+        const firebaseConfig = {
+            apiKey: "AIzaSyDxIYV6GJbwcg9TKdSbhWCN3X3WXXK0EWk",
+            authDomain: "quick-connect-app-40ef2.firebaseapp.com",
+            projectId: "quick-connect-app-40ef2",
+            storageBucket: "quick-connect-app-40ef2.appspot.com",
+            messagingSenderId: "527717734334",
+            appId: "1:527717734334:web:7ad79cfd20dfd603774bef",
+            measurementId: "G-K78LLKVFYS"
+          };
+        
+        firebase.initializeApp(firebaseConfig);
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                displayName = user.displayName;
+                document.getElementById('username').textContent = displayName;
+
+                const initial = displayName.charAt(0).toUpperCase();
+                const initaldiv = document.getElementById('initialDiv').textContent = initial;
+
+                initialDiv.textContent = initial;
+                initialDiv.addEventListener('click', displayDropdown);
+            } else {
+                window.location.href = "/views/login.html"; 
+            }
+        });
+
+        function displayDropdown() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownMenu.style.display = dropdownMenu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        document.addEventListener('click', function (event) {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            if (!dropdownMenu.contains(event.target) && event.target !== document.getElementById('initialDiv')) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+
+        const logoutOption = document.getElementById('logoutOption');
+        logoutOption.addEventListener('click', function logout() {
+            firebase.auth().signOut()
+                .then(() => {
+                    window.location.href = "/views/login.html";
+                })
+                .catch(error => {
+                    console.log("Error logging out: " + error.message);
+                });
+        });
+
+    </script>
+</body>
+</html>
