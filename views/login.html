@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <!-- Include any CSS styles specific to your login screen -->
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="/public/style.css">
 </head>
 <body class="structure">
 
@@ -19,51 +19,16 @@
         <input type="email" id="email" name="email" required>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
-        <button id="loginbtn" type="button">Login</button>
+        <button type="submit">Login</button>
         <p>Don't have an account? <a href="/views/signup.html">Sign up here</a></p>
     </form>
     </div>
     <!-- Include the Firebase SDK script -->
-    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-auth.js"></script>
-
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDxIYV6GJbwcg9TKdSbhWCN3X3WXXK0EWk",
-            authDomain: "quick-connect-app-40ef2.firebaseapp.com",
-            projectId: "quick-connect-app-40ef2",
-            storageBucket: "quick-connect-app-40ef2.appspot.com",
-            messagingSenderId: "527717734334",
-            appId: "1:527717734334:web:7ad79cfd20dfd603774bef",
-            measurementId: "G-K78LLKVFYS"
-          };
-        
-        firebase.initializeApp(firebaseConfig);
-        
-        document.getElementById('loginbtn').addEventListener('click', loginUser)
-        
-        function loginUser()
-        {
-            let email = document.getElementById('email').value
-            let password = document.getElementById('password').value
-
-            firebase.auth().signInWithEmailAndPassword(email,password).catch(e => {
-                console.log(e)
-            })
-        }
-
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                console.log(user);
-                window.location.href = "/views/dashboard.html"; // Replace "dashboard.html" with the actual URL of your dashboard page
-            } else {
-                console.log("No user");
-            }
-        });
-        
-
-        
-
-    </script>
+    <script src="/__/firebase/8.9.1/firebase-app.js"></script>
+    <script src="/__/firebase/8.9.1/firebase-auth.js"></script>
+    <script src="/__/firebase/init.js"></script>
+    
+    <!-- Add your custom JavaScript code for handling login -->
+    <script src="script.js"></script>
 </body>
 </html>
