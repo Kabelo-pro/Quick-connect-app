@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Nearby Connections</title>
     <!-- Include any CSS styles specific to your dashboard screen -->
     <link rel="stylesheet" href="../css/dashboard.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -120,6 +120,8 @@
     <script src="/__/firebase/init.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-firestore.js"></script>
+
     <!-- Add your custom JavaScript code for handling the dashboard -->
     <script type="text/javascript">
         const firebaseConfig = {
@@ -133,18 +135,101 @@
           };
         
         firebase.initializeApp(firebaseConfig);
+        // Function to calculate distance using the Haversine formula
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const earthRadius = 6371; // Earth's radius in kilometers
+            const dLat = (lat2 - lat1) * (Math.PI / 180);
+            const dLon = (lon2 - lon1) * (Math.PI / 180);
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos((lat1 * Math.PI) / 180) *
+                Math.cos((lat2 * Math.PI) / 180) *
+                Math.sin(dLon / 2) *
+                Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const distance = earthRadius * c;
+            return distance; // Distance in kilometers
+        }
+
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 displayName = user.displayName;
                 document.getElementById('username').textContent = displayName;
+
+                const db = firebase.firestore(); // Get a reference to Firestore
 
                 const initial = displayName.charAt(0).toUpperCase();
                 const initaldiv = document.getElementById('initialDiv').textContent = initial;
 
                 initialDiv.textContent = initial;
                 initialDiv.addEventListener('click', displayDropdown);
+
+                // Get user's live location using Geolocation API
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        position => {
+                            const { latitude, longitude } = position.coords;
+
+                            // Check if latitude and longitude fields exist, and update or create them
+                            db.collection('Users')
+                            .get()
+                            .then(querySnapshot => {
+                                const currentUser = querySnapshot.docs.find(doc => doc.id === user.uid);
+                        
+                                if (currentUser) {
+                                    // User document found, proceed with calculating nearby users
+                                    const userLatitude = currentUser.data().latitude;
+                                    const userLongitude = currentUser.data().longitude;
+                        
+                                    const nearbyUsers = querySnapshot.docs
+                                        .filter(doc => doc.id !== user.uid) // Exclude the current user
+                                        .map(doc => {
+                                            const { latitude, longitude, username } = doc.data(); // Extract the username from the document
+                                            const distance = calculateDistance(userLatitude, userLongitude, latitude, longitude);
+                                            return { username: username, distance: distance }; // Use the username instead of doc.id
+                                        })
+                                        .filter(user => user.distance <= 30) // Filter users within a 30km radius
+                                        .sort((a, b) => a.distance - b.distance); // Sort by distance
+                        
+                                    const mainElement = document.querySelector('.main');
+                                    mainElement.innerHTML = ''; // Clear previous content
+                        
+                                    if (nearbyUsers.length > 0) {
+                                        const nearbyList = document.createElement('ul');
+                        
+                                        nearbyUsers.forEach(user => {
+                                            const listItem = document.createElement('li');
+                                            listItem.textContent = `Username: ${user.username}, Distance: ${user.distance.toFixed(2)} km`; // Display username
+                                            nearbyList.appendChild(listItem);
+                                        });
+                        
+                                        mainElement.appendChild(nearbyList);
+                                    } else {
+                                        const noNearbyUsersMessage = document.createElement('p');
+                                        noNearbyUsersMessage.textContent = 'No nearby users found.';
+                                        mainElement.appendChild(noNearbyUsersMessage);
+                                    }
+                                } else {
+                                    // User document not found or missing location data
+                                    const mainElement = document.querySelector('.main');
+                                    mainElement.innerHTML = ''; // Clear previous content
+                        
+                                    const noLocationDataMessage = document.createElement('p');
+                                    noLocationDataMessage.textContent = "Your location data is missing. Please enable location sharing.";
+                                    mainElement.appendChild(noLocationDataMessage);
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error fetching nearby users: ", error);
+                            });
+                        },
+                        error => {
+                            console.error("Error getting location: ", error);
+                        }
+                    );
+                }
             } else {
-                window.location.href = "/views/login.html"; 
+                window.location.href = "/views/login.html";
             }
         });
 

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="../css/profile.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+</head>
+<body >    
+    <div class="header__wrapper">
+        <header>
+
+        </header>
+        <div class="cols__container">
+          <div class="left__col">
+            <div class="img__container">
+              <img src="../assets/user.jpeg" alt="Anna Smith" />
+              <span></span>
+            </div>
+            <h2 id="username">Anna Smith</h2>
+            <p id="headline">UX/UI Designer</p>
+            <p id="email">anna@example.com</p>
+  
+            <button>Connect</button>
+
+  
+            <div class="content">
+              <p>
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam
+                erat volutpat. Morbi imperdiet, mauris ac auctor dictum, nisl
+                ligula egestas nulla.
+              </p>
+  
+              <ul>
+                <li><i class="fab fa-twitter"></i></li>
+                <i class="fab fa-pinterest"></i>
+                <i class="fab fa-facebook"></i>
+                <i class="fab fa-dribbble"></i>
+              </ul>
+            </div>
+          </div>
+          <div class="right__col">
+          </div>
+        </div>
+      </div>
+    <!-- Include the Firebase SDK script -->
+    <script src="/__/firebase/8.9.1/firebase-app.js"></script>
+    <script src="/__/firebase/8.9.1/firebase-auth.js"></script>
+    <script src="/__/firebase/init.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-firestore.js"></script>
+
+    <!-- Add your custom JavaScript code for handling the dashboard -->
+    <script type="text/javascript">
+        const firebaseConfig = {
+          apiKey: "AIzaSyDxIYV6GJbwcg9TKdSbhWCN3X3WXXK0EWk",
+          authDomain: "quick-connect-app-40ef2.firebaseapp.com",
+          projectId: "quick-connect-app-40ef2",
+          storageBucket: "quick-connect-app-40ef2.appspot.com",
+          messagingSenderId: "527717734334",
+          appId: "1:527717734334:web:7ad79cfd20dfd603774bef",
+          measurementId: "G-K78LLKVFYS"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const userID = urlParams.get('uid');
+
+        const db = firebase.firestore();
+
+        const userRef = db.collection('Users').doc(userID);
+        userRef
+        .get()
+        .then((doc) => {
+            if (doc.exists) {
+            const userData = doc.data();
+    
+            // Display the user data in the input fields
+            document.getElementById('username').innerHTML = userData.username;
+            document.getElementById('email').innerHTML = userData.email;
+            document.getElementById('number').innerHTML = userData.number;
+            document.getElementById('headline').innerHTML = userData.headline;
+            document.title = userData.username;
+            //document.getElementById('address').value = userData.address || '';
+            ///document.getElementById('linkedin').value = userData.linkedin || '';
+            //document.getElementById('instagram').value = userData.instagram || '';
+            //document.getElementById('facebook').value = userData.facebook || '';
+            //document.getElementById('tiktok').value = userData.tikTok || '';
+            } else {
+            console.log('User data not found.');
+            }
+        })
+        .catch((error) => {
+            console.error('Error retrieving user data:', error);
+            // Handle error
+            console.log(error);
+        });
+        
+    </script>	
+</body>
+</html>
